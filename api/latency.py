@@ -6,7 +6,6 @@ import os
 
 app = FastAPI()
 
-# ✅ Enable CORS (POST from any origin)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,15 +13,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ✅ Correct JSON file path (works on Vercel)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 file_path = os.path.join(BASE_DIR, "q-vercel-latency.json")
 
 with open(file_path, "r") as f:
     telemetry_data = json.load(f)
 
-
-# ✅ IMPORTANT: route should be "/" (Vercel automatically makes /api/latency)
 @app.post("/")
 async def get_latency_metrics(request: Request):
     body = await request.json()
